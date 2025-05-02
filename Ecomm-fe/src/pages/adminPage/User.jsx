@@ -1,347 +1,198 @@
-import React, { useState } from 'react';
-import { 
-  Layout, 
-  Typography, 
-  Table, 
-  Tag, 
-  Space, 
-  Button, 
-  Input, 
-  Modal, 
-  Form, 
-  Select, 
-  Popconfirm, 
-  message 
-} from 'antd';
-import { 
-  SearchOutlined, 
-  UserAddOutlined, 
-  EditOutlined, 
-  DeleteOutlined,
-  LockOutlined,
-  UnlockOutlined
-} from '@ant-design/icons';
-
-const { Content } = Layout;
-const { Title } = Typography;
+import React, { use, useEffect, useState } from "react";
+import { Form, Input, Button, Select, message, Spin, Table, Space } from "antd";
+import { useNavigate } from "react-router-dom";
+import {DeleteOutlined, EditOutlined, LoadingOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
-const Users = () => {
-  const [searchText, setSearchText] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editingUser, setEditingUser] = useState(null);
-  const [form] = Form.useForm();
-  
-  // Dữ liệu giả lập cho danh sách người dùng
-  const [users, setUsers] = useState([
-    {
-      key: '1',
-      id: '001',
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      role: 'Admin',
-      status: 'Active',
-      lastLogin: '29/04/2025 09:23',
-    },
-    {
-      key: '2',
-      id: '002',
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com',
-      role: 'Editor',
-      status: 'Active',
-      lastLogin: '28/04/2025 15:45',
-    },
-    {
-      key: '3',
-      id: '003',
-      name: 'Mike Johnson',
-      email: 'mike.johnson@example.com',
-      role: 'User',
-      status: 'Inactive',
-      lastLogin: '25/04/2025 11:30',
-    },
-    {
-      key: '4',
-      id: '004',
-      name: 'Sarah Williams',
-      email: 'sarah.williams@example.com',
-      role: 'User',
-      status: 'Active',
-      lastLogin: '27/04/2025 08:15',
-    },
-    {
-      key: '5',
-      id: '005',
-      name: 'David Brown',
-      email: 'david.brown@example.com',
-      role: 'Editor',
-      status: 'Blocked',
-      lastLogin: '20/04/2025 16:10',
-    },
-  ]);
+const User = () => {
+  // sate quản lý loading danh sách người dùng
+  const [loading, setLoading] = useState(false);
+  // sate quản lý danh sách người dùng
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
-  const showModal = (user = null) => {
-    setEditingUser(user);
-    if (user) {
-      form.setFieldsValue(user);
-    } else {
-      form.resetFields();
-    }
-    setIsModalVisible(true);
+  const onFinish = (values) => {
+    console.log("Nhận values:", values);
+
+
+    message.success("Tạo người dùng thành công!");
+    navigate("/admin/users");
   };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setEditingUser(null);
-    form.resetFields();
+  const handleEdit = (record) => {
+    console.log("Chỉnh sửa người dùng:", record);
+    // Chuyển hướng đến trang chỉnh sửa người dùng với ID người dùng
+    navigate(`/admin/users/edit/${record.id}`);
   };
-
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      if (editingUser) {
-        // Cập nhật người dùng hiện có
-        setUsers(prev => 
-          prev.map(user => 
-            user.id === editingUser.id ? { ...user, ...values } : user
-          )
-        );
-        message.success('Người dùng đã được cập nhật!');
-      } else {
-        // Thêm người dùng mới
-        const newUser = {
-          key: Date.now().toString(),
-          id: `00${users.length + 1}`,
-          ...values,
-          lastLogin: 'Chưa đăng nhập'
-        };
-        setUsers(prev => [...prev, newUser]);
-        message.success('Người dùng mới đã được thêm!');
+  const handleDelete = async (userId) => {
+    console.log("Xóa người dùng:", userId);
+    try {
+      const response = await fetch(`http://localhost:8080/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Lỗi khi xóa người dùng");
       }
-      setIsModalVisible(false);
-      setEditingUser(null);
-      form.resetFields();
-    });
-  };
-
-  const handleDelete = (id) => {
-    setUsers(prev => prev.filter(user => user.id !== id));
-    message.success('Người dùng đã được xóa!');
-  };
-
-  const handleToggleStatus = (user) => {
-    const newStatus = user.status === 'Active' ? 'Inactive' : 
-                     (user.status === 'Inactive' ? 'Active' : 'Active');
-    
-    setUsers(prev => 
-      prev.map(item => 
-        item.id === user.id ? { ...item, status: newStatus } : item
-      )
-    );
-    
-    message.success(`Trạng thái người dùng đã chuyển thành ${newStatus}!`);
-  };
-
-  // Lọc người dùng dựa trên từ khóa tìm kiếm
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchText.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchText.toLowerCase())
-  );
+      message.success("Xóa người dùng thành công!");
+      setUsers(users.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.error("Lỗi khi xóa người dùng:", error);
+    }
+  }
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: '5%',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: 'Tên',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
     },
     {
-      title: 'Vai trò',
-      dataIndex: 'role',
-      key: 'role',
-      filters: [
-        { text: 'Admin', value: 'Admin' },
-        { text: 'Editor', value: 'Editor' },
-        { text: 'User', value: 'User' },
-      ],
-      onFilter: (value, record) => record.role === value,
-      render: (role) => {
-        let color = '';
-        if (role === 'Admin') color = 'red';
-        else if (role === 'Editor') color = 'blue';
-        else color = 'green';
-        
-        return <Tag color={color}>{role}</Tag>;
-      },
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      filters: [
-        { text: 'Active', value: 'Active' },
-        { text: 'Inactive', value: 'Inactive' },
-        { text: 'Blocked', value: 'Blocked' },
-      ],
-      onFilter: (value, record) => record.status === value,
-      render: (status) => {
-        let color = '';
-        if (status === 'Active') color = 'green';
-        else if (status === 'Inactive') color = 'orange';
-        else if (status === 'Blocked') color = 'red';
-        
-        return <Tag color={color}>{status}</Tag>;
-      },
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: 'Đăng nhập cuối',
-      dataIndex: 'lastLogin',
-      key: 'lastLogin',
-      sorter: (a, b) => new Date(a.lastLogin.split(' ')[0].split('/').reverse().join('-')) - 
-                        new Date(b.lastLogin.split(' ')[0].split('/').reverse().join('-')),
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
     },
     {
-      title: 'Hành động',
-      key: 'action',
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Action",
+      key: "action",
       render: (_, record) => (
-        <Space size="small">
-          <Button 
-            type="primary" 
-            size="small" 
-            icon={<EditOutlined />} 
-            onClick={() => showModal(record)}
-          >
-            Sửa
+        <Space size="middle">
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+            Edit
           </Button>
-          <Popconfirm
-            title="Bạn có chắc muốn xóa người dùng này?"
-            onConfirm={() => handleDelete(record.id)}
-            okText="Có"
-            cancelText="Không"
-          >
-            <Button 
-              type="primary" 
-              danger 
-              size="small" 
-              icon={<DeleteOutlined />}
-            >
-              Xóa
-            </Button>
-          </Popconfirm>
-          <Button
-            type={record.status === 'Active' ? 'default' : 'primary'}
-            size="small"
-            icon={record.status === 'Active' ? <LockOutlined /> : <UnlockOutlined />}
-            onClick={() => handleToggleStatus(record)}
-          >
-            {record.status === 'Active' ? 'Khóa' : 'Mở khóa'}
+          <Button icon={<DeleteOutlined />} danger onClick={() => handleDelete(record.id)}>
+            Delete
           </Button>
         </Space>
       ),
     },
-  ];
+  
+  
+  ]
+ // hàm gọi api lấy danh sách người dùng
+ useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        // Giả lập gọi API để lấy danh sách người dùng
+        const response = await fetch("http://localhost:8080/users/", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        if(!response.ok) {
+          throw new Error("Lỗi khi lấy danh sách người dùng");
+        }
+        const data = await response.json();
+        setUsers(data.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách người dùng:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchUsers();
+ },[])
   return (
-    <Layout style={{ marginLeft: 200, minHeight: '100vh' }}>
-      <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-        <div style={{ padding: 24, background: '#fff', minHeight: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-            <Title level={2}>Quản lý người dùng</Title>
-            <div>
-              <Input
-                placeholder="Tìm kiếm người dùng..."
-                prefix={<SearchOutlined />}
-                style={{ width: 250, marginRight: 16 }}
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-              <Button 
-                type="primary" 
-                icon={<UserAddOutlined />} 
-                onClick={() => showModal()}
-              >
-                Thêm người dùng
-              </Button>
-            </div>
-          </div>
-          
-          <Table
-            columns={columns}
-            dataSource={filteredUsers}
-            pagination={{ pageSize: 10 }}
-            bordered
-          />
+    <div>
+    {/* form tạo người dùng */}
+      <div style={{ maxWidth: 600, margin: "0 auto", padding: "20px" }}>
+      <h2>Create User</h2>
+      <Form
+        name="create_user"
+        onFinish={onFinish}
+        layout="vertical"
+        initialValues={{
+          role: "USER", 
+        }}
+      >
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
+        >
+          <Input placeholder="Enter username" />
+        </Form.Item>
 
-          <Modal
-            title={editingUser ? "Chỉnh sửa người dùng" : "Thêm người dùng mới"}
-            visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            okText={editingUser ? "Cập nhật" : "Thêm"}
-            cancelText="Hủy"
-          >
-            <Form
-              form={form}
-              layout="vertical"
-              name="user_form"
-            >
-              <Form.Item
-                name="name"
-                label="Tên"
-                rules={[{ required: true, message: 'Vui lòng nhập tên người dùng!' }]}
-              >
-                <Input placeholder="Nhập tên người dùng" />
-              </Form.Item>
-              <Form.Item
-                name="email"
-                label="Email"
-                rules={[
-                  { required: true, message: 'Vui lòng nhập email!' },
-                  { type: 'email', message: 'Email không hợp lệ!' }
-                ]}
-              >
-                <Input placeholder="Nhập email" />
-              </Form.Item>
-              <Form.Item
-                name="role"
-                label="Vai trò"
-                rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}
-              >
-                <Select placeholder="Chọn vai trò">
-                  <Option value="Admin">Admin</Option>
-                  <Option value="Editor">Editor</Option>
-                  <Option value="User">User</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="status"
-                label="Trạng thái"
-                rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
-              >
-                <Select placeholder="Chọn trạng thái">
-                  <Option value="Active">Active</Option>
-                  <Option value="Inactive">Inactive</Option>
-                  <Option value="Blocked">Blocked</Option>
-                </Select>
-              </Form.Item>
-            </Form>
-          </Modal>
-        </div>
-      </Content>
-    </Layout>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            { required: true, message: "Please input your email!" },
+            { type: "email", message: "Please input a valid email!" },
+          ]}
+        >
+          <Input placeholder="Enter email" />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password placeholder="Enter password" />
+        </Form.Item>
+
+        <Form.Item
+          label="Role"
+          name="role"
+          rules={[{ required: true, message: "Please select a role!" }]}
+        >
+          <Select placeholder="Select a role">
+            <Option value="USER">USER</Option>
+            <Option value="ADMIN">ADMIN</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Create User
+          </Button>
+        </Form.Item>
+      </Form>
+      </div>
+     
+
+      <div style={{ marginTop: "40px" }}>
+        {/* Bảng danh sách người dùng */}
+        <h2>User List</h2>
+        {loading ? (
+          <Spin tip="Loading users..." />
+        ) :   (<Table columns={columns} dataSource={users} rowKey="id" /> )   
+        }
+      </div>
+    </div>
+    
   );
 };
 
-export default Users;
+export default User;

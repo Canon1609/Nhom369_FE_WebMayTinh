@@ -1,80 +1,215 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { 
+  Typography, 
+  Row, 
+  Col, 
+  Card, 
+  Statistic, 
+  Divider, 
+  Space, 
+  Avatar, 
+  Layout, 
+  Breadcrumb 
+} from "antd";
+import { 
+  CustomerServiceOutlined, 
+  SafetyOutlined, 
+  TeamOutlined, 
+  TrophyOutlined 
+} from "@ant-design/icons";
+import { useLocation } from "react-router-dom";
 import "../../styles/About_styles/About.scss";
 
+const { Title, Paragraph, Text } = Typography;
+const { Content } = Layout;
+
 const AboutPage = () => {
+  const { pathname } = useLocation();
+
+  // Cuộn lên đầu trang khi chuyển trang
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const stats = [
-    { count: "10.5k", label: "Sellers active on our site" },
-    { count: "33k", label: "Monthly Product Sale" },
-    { count: "45.5k", label: "Customers active on our site" },
-    { count: "25k", label: "Annual gross sale on our site" },
+    { count: "10.5k", label: "Người bán hoạt động trên trang web của chúng tôi", icon: <TeamOutlined /> },
+    { count: "33k", label: "Doanh số sản phẩm hàng tháng", icon: <TrophyOutlined /> },
+    { count: "45.5k", label: "Khách hàng hoạt động trên trang web của chúng tôi", icon: <TeamOutlined /> },
+    { count: "25k", label: "Doanh thu hàng năm trên trang web của chúng tôi", icon: <TrophyOutlined /> },
   ];
 
   const teamMembers = [
-    { name: "Tom Cruise", position: "Founder & Chairman", image: "https://s3-alpha-sig.figma.com/img/0881/49fd/5afc043392ee3cbb529f429b3e2098d3?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=thm~FY6rZ2J~YF~RFYLGs1QDZDwu5sQAoHPRSj9NYzmC4Z4MU1v9kMkzwQ0w1YSKnzyXfYYInyNSGuD1lj5CDJtJM33IsXvwvzIX7u2MQh~5dw5RUCTDtvKf12g7g~Ebcg-WD8MO90QncV7rzdl8RNtvBqoPnNpJAoiEfAJ0KDLTnFNnJLtegC~H9b3H3iwaZe3bmtSKsEzRY5eef16AV7ugKTRQaCcVddKGcIzHZjAp4z5hvtZf8EsepcWJjr~uLT6W2CkAUr-0avE1cnMN8ZJ9qhIR6lRxpaHk4kURmQReb6nmVOMQkYjQji6t4m2Di1Aus7KVIlrA5SH8YpVEnA__" },
-    { name: "Emma Watson", position: "Managing Director", image: "https://s3-alpha-sig.figma.com/img/8438/eab9/a2fe88af0272adecd83422d0cb7e20d7?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Fe52RwdgpI4xFJwOhamd3IuZGjQ1hl03LYHRQgMW16nAtEv90uUrNT7Vy12S0JTZ2eXutuYebNY8ARXSD6woaJJJilJKmv1d5vMCbZKXc1XMnG~Qbwhx2JAsHEDxjJmTAhaRCQlJpLnwxYZ6TrvXBrH1cfwjbWUrFcdP4ef0XQRbmzb0eIpyB--uGP8aN5PO46y5PVwZT~8vEs48cDI-Z~aT5kzaf~l-tlUiDJTKmoYf0p6BY1EAMYvE0sggXnKTwW~lp5Ms70ihGig49ro2EfH8wp65Dwy~C2hnE5y0hEyg1CypQ~B4M84n6LIOhYrPiYCjqlm0N9v5h3UPLGaFCw__" },
-    { name: "Will Smith", position: "Product Designer", image: "https://s3-alpha-sig.figma.com/img/ede4/8f2b/5df8103b281240ce5bafe5dd7d215ab8?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=I3p~IQv88Piie7kBdp1R4ZLNjm~XpemoUQize9rWICD4mrXjPjyHx2xvIJKwYhSL1xOjwgZf3Wm05pmNg~~vHrV7k8eyBJvfxYVc7Xq~KO7vith7meQvd4BSR-zbkQCnD-aNlJgWZ5SLOSnT8or29uSJVmtlg8l0lFHEkrmuqNiQ3uu8Mh3NThtC~eZ5zy-D2rq8qYTZ8LT7ykDoxucOPXUY7K8Q3BPHJXfn2w1HC231rXVVo5yiRL0G-avYnFRsxBhInwGNBbodwo20KHUKQttLRcR0S8aQfV4pjjq9zf31sAtC4toIFppkPxGsro2oa0hvRc1i6xKLLitU50G3GQ__" },
+    { 
+      name: "Tom Cruise", 
+      position: "Nhà sáng lập & Chủ tịch", 
+      image: "https://images2.thanhnien.vn/528068263637045248/2024/11/28/5-1732774990424925790598.jpg",
+      bio: "Dẫn dắt công ty với hơn 15 năm kinh nghiệm trong lĩnh vực bán lẻ và niềm đam mê đổi mới."
+    },
+    { 
+      name: "Emma Watson", 
+      position: "Giám đốc điều hành", 
+      image: "https://laban.edu.vn/wp-content/uploads/2024/02/11.2_Emma_Watson.jpg",
+      bio: "Quản lý hoạt động hàng ngày với sự tập trung vào hiệu quả và cơ hội phát triển."
+    },
+    { 
+      name: "Will Smith", 
+      position: "Nhà thiết kế sản phẩm", 
+      image: "https://m.media-amazon.com/images/M/MV5BMGI3OTI0NjctMjM2ZC00MjZiLWIxMjctODczN2M4MTFjZmY1XkEyXkFqcGdeQXJoYW5uYWg@._V1_.jpg",
+      bio: "Tạo ra các thiết kế sáng mới và thân thiện với người dùng để nâng cao trải nghiệm khách hàng."
+    },
   ];
 
   const features = [
-    { title: "FREE AND FAST DELIVERY", description: "Free delivery for all orders over $140" },
-    { title: "24/7 CUSTOMER SERVICE", description: "Friendly 24/7 customer support" },
-    { title: "MONEY BACK GUARANTEE", description: "We return money within 30 days" },
+    { 
+      title: "GIAO HÀNG MIỄN PHÍ VÀ NHANH CHÓNG", 
+      description: "Miễn phí giao hàng cho tất cả đơn hàng trên 140 USD", 
+      // icon: <DeliveryOutlined style={{ fontSize: 36, color: '#1890ff' }} /> 
+    },
+    { 
+      title: "DỊCH VỤ KHÁCH HÀNG 24/7", 
+      description: "Hỗ trợ khách hàng thân thiện 24/7", 
+      icon: <CustomerServiceOutlined style={{ fontSize: 36, color: '#1890ff' }} /> 
+    },
+    { 
+      title: "BẢO ĐẢM HOÀN TIỀN", 
+      description: "Chúng tôi hoàn tiền trong vòng 30 ngày", 
+      icon: <SafetyOutlined style={{ fontSize: 36, color: '#1890ff' }} /> 
+    },
   ];
 
   return (
-    <div className="about-page">
-      {/* Our Story */}
-      <div className="about-section">
-        <div className="about-text">
-          <h1>Our Story</h1>
-          <p>
-            Launched in 2015, Exclusive is South Asia`s premier online shopping marketplace with an active presence in Bangladesh. 
-            Supported by a wide range of tailored marketing, data, and service solutions, Exclusive has 10,500 sellers and 300 brands 
-            and serves 3 million customers across the region.
-          </p>
-          <p>
-            Exclusive has more than 1 million products to offer, growing at a very fast pace. Exclusive offers a diverse assortment 
-            in categories ranging from consumer products.
-          </p>
+    <Layout className="about-page-layout">
+      {/* Breadcrumb Navigation */}
+      <div className="breadcrumb-container">
+        <Breadcrumb>
+          <Breadcrumb.Item><a href="/">Trang chủ</a></Breadcrumb.Item>
+          <Breadcrumb.Item>Giới thiệu</Breadcrumb.Item>
+        </Breadcrumb>
+      </div>
+
+      <Content className="site-content">
+        {/* Hero Section with Title */}
+        <div className="hero-section">
+          <Title level={1}>Về công ty chúng tôi</Title>
+          <Divider />
         </div>
-        <div className="about-image">
-          <img src="https://s3-alpha-sig.figma.com/img/fcc8/9aaa/7b85f8c1dcce81e71e2eb178be13bd4d?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=snyr9cEc4mqkgddzXXvB88s85nA478H6OeY7Ghu1AVMc2W9TZN2C~ttrZ9P8eimp3g~zK0Re26~8AgawUNjAjDeomUlIyRvap-mY1Oos1I9NF-zBUTy6TWJvC~I3cj508tGzlML5YRSizC0g~z0tmse6N5j5iVRPGfSomN1AQliLvl34rzzvbpmWLBT7~sbhVYOihHRItVnZin6fOV6p6Ft9iCU92pjyCQ~hGYmmrwUMHe53ANC4t1mNLU6UhX7daOzBShLqiaEgj99VODQX7O8u5KykkUZM12iMJKa6nR69v5Sya6SkQpLHswLJiTU4Cg0yY6vcg2atLxeogFrgmA__" alt="About Us" />
+
+        {/* Our Story Section */}
+        <div className="about-section-container">
+          <Row gutter={[48, 48]} align="middle">
+            <Col xs={24} lg={12}>
+              <div className="about-text-content">
+                <Title level={2}>Câu chuyện của chúng tôi</Title>
+                <Paragraph>
+                  Ra mắt vào năm 2015, Exclusive là nền tảng mua sắm trực tuyến hàng đầu tại Nam Á, với sự hiện diện mạnh mẽ tại Bangladesh. 
+                  Được hỗ trợ bởi các giải pháp tiếp thị, dữ liệu và dịch vụ được thiết kế riêng, Exclusive có 10.500 người bán và 300 thương hiệu, 
+                  phục vụ 3 triệu khách hàng trên toàn khu vực.
+                </Paragraph>
+                <Paragraph>
+                  Exclusive cung cấp hơn 1 triệu sản phẩm, đang phát triển với tốc độ rất nhanh. Exclusive mang đến một danh mục đa dạng 
+                  từ các sản phẩm tiêu dùng.
+                </Paragraph>
+              </div>
+            </Col>
+            <Col xs={24} lg={12}>
+              <div className="about-image-container">
+                <img 
+                  src="https://www.vib.com.vn/wps/wcm/connect/e40ff60a-fc38-4c42-b327-29a61e2adc68/E-commerce-va-E-business+%285%29.jpg.webp?MOD=AJPERES&CACHEID=ROOTWORKSPACE-e40ff60a-fc38-4c42-b327-29a61e2adc68-oKoX9MZ" 
+                  alt="Giới thiệu" 
+                  className="about-image"
+                />
+              </div>
+            </Col>
+          </Row>
         </div>
-      </div>
 
-      {/* Stats */}
-      <div className="stats">
-        {stats.map((stat, index) => (
-          <div className="stat-card" key={index}>
-            <h2>{stat.count}</h2>
-            <p>{stat.label}</p>
-          </div>
-        ))}
-      </div>
+        {/* Stats Section */}
+        <div className="stats-section">
+          <Title level={2} className="section-title">Thống kê công ty</Title>
+          <Divider />
+          <Row gutter={[32, 32]}>
+            {stats.map((stat, index) => (
+              <Col xs={24} sm={12} lg={6} key={index}>
+                <Card className="stat-card" bordered={false}>
+                  <div className="stat-icon">{stat.icon}</div>
+                  <Statistic 
+                    value={stat.count} 
+                    className="stat-count" 
+                  />
+                  <Text className="stat-label">{stat.label}</Text>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
 
-      {/* Team Members */}
-      <div className="team">
-        {teamMembers.map((member, index) => (
-          <div className="team-card" key={index}>
-            <div className="team-image">
-              <img src={member.image} alt={member.name} width={100}/>
-            </div>
-            <h3>{member.name}</h3>
-            <p>{member.position}</p>
-          </div>
-        ))}
-      </div>
+        {/* Team Members Section */}
+        <div className="team-section">
+          <Title level={2} className="section-title">Gặp gỡ đội ngũ của chúng tôi</Title>
+          <Divider />
+          <Row gutter={[32, 32]} justify="center">
+            {teamMembers.map((member, index) => (
+              <Col xs={24} sm={12} md={8} key={index}>
+                <Card 
+                  className="team-card" 
+                  bordered={false}
+                  cover={
+                    <div className="team-image-container">
+                      <img src={member.image} alt={member.name} className="team-image" />
+                    </div>
+                  }
+                >
+                  <div className="team-info">
+                    <Title level={3}>{member.name}</Title>
+                    <Text type="secondary" className="position">{member.position}</Text>
+                    <Paragraph className="member-bio">{member.bio}</Paragraph>
+                    <Space className="social-links">
+                      <a href="#" className="social-icon">
+                        <i className="fab fa-facebook-f"></i>
+                      </a>
+                      <a href="#" className="social-icon">
+                        <i className="fab fa-twitter"></i>
+                      </a>
+                      <a href="#" className="social-icon">
+                        <i className="fab fa-linkedin-in"></i>
+                      </a>
+                    </Space>
+                  </div>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
 
-      {/* Features */}
-      <div className="features">
-        {features.map((feature, index) => (
-          <div className="feature-card" key={index}>
-            <h3>{feature.title}</h3>
-            <p>{feature.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+        {/* Features Section */}
+        <div className="features-section">
+          <Title level={2} className="section-title">Tại sao chọn chúng tôi</Title>
+          <Divider />
+          <Row gutter={[32, 32]}>
+            {features.map((feature, index) => (
+              <Col xs={24} md={8} key={index}>
+                <Card className="feature-card" bordered={false}>
+                  <div className="feature-icon">{feature.icon}</div>
+                  <Title level={3} className="feature-title">{feature.title}</Title>
+                  <Paragraph className="feature-description">{feature.description}</Paragraph>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+
+        {/* Call to Action */}
+        <div className="cta-section">
+          <Card className="cta-card" bordered={false}>
+            <Title level={2}>Sẵn sàng mua sắm cùng chúng tôi?</Title>
+            <Paragraph>
+              Tham gia cùng hàng ngàn khách hàng hài lòng và trải nghiệm các sản phẩm cao cấp cùng dịch vụ xuất sắc của chúng tôi.
+            </Paragraph>
+            <a href="/" className="cta-button">Mua sắm ngay</a>
+          </Card>
+        </div>
+      </Content>
+    </Layout>
   );
 };
 

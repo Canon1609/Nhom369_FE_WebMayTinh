@@ -9,7 +9,7 @@ import Footer from "./components/layout/Footer.jsx";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { Layout } from "antd";
 import "../src/styles/Reset_CSS/style.css";
-
+import ScrollToTop from "./components/ScrollToTop/index.jsx";
 function App() {
   const { user, setUser } = useContext(AuthContext);
   const [searchHandler, setSearchHandler] = useState(null);
@@ -52,6 +52,7 @@ function App() {
 
   return (
     <div>
+    
       <Layout>
         <Navbar onSearch={searchHandler} />
         <Routes>
@@ -62,6 +63,8 @@ function App() {
         </Routes>
         <Footer />
       </Layout>
+   
+     
     </div>
   );
 }

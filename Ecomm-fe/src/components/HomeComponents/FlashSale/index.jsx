@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Card, Button, Rate, Carousel } from 'antd';
 import { EyeOutlined, HeartOutlined } from '@ant-design/icons';
 import './FlashSale.css';
+import { Link, Links, Navigate, useNavigate } from 'react-router-dom';
+import ScrollToTop from '../../ScrollToTop';
 
 const FlashSales = () => {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     days: 3,
     hours: 23,
@@ -40,6 +43,7 @@ const FlashSales = () => {
 
   const products = [
     {
+      id: 1,
       image: 'https://hanoicomputercdn.com/media/product/86482_may_choi_game_sony_playstation_5_ps5_pro_1.jpg',
       discount: '-40%',
       name: 'HAVIT HV-G92 Gamepad',
@@ -49,6 +53,7 @@ const FlashSales = () => {
       reviews: 88,
     },
     {
+      id: 2,
       image: 'https://logico.com.vn/images/products/2023/10/19/original/bo-may-choi-game-ps5-spider-man-2-le_1697685688.png',
       discount: '-35%',
       name: 'AK-900 Wired Keyboard',
@@ -58,6 +63,7 @@ const FlashSales = () => {
       reviews: 75,
     },
     {
+      id: 3,
       image: 'https://hailongcomputer.vn/wp-content/uploads/2024/01/pc-gaming-gia-re-g4060-i5-12400f-0.webp',
       discount: '-30%',
       name: 'IPS LCD Gaming Monitor',
@@ -67,6 +73,7 @@ const FlashSales = () => {
       reviews: 99,
     },
     {
+      id: 4,
       image: 'https://hailongcomputer.vn/wp-content/uploads/2024/01/pc-gaming-gia-re-g4060-i5-12400f-0.webp',
       discount: '-25%',
       name: 'S-Series Comfort Chair',
@@ -76,7 +83,12 @@ const FlashSales = () => {
       reviews: 99,
     },
   ];
-
+  // Function to handle click event on product card
+  const handleClick = (productId) => {
+    // Redirect to the detail page with the product ID
+    navigate(`/detailPage/${productId}`);
+     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   return (
     <div className="flash-sales-container">
       <div className="flash-sales-header">
@@ -131,7 +143,9 @@ const FlashSales = () => {
         ]}
       >
         {products.map((product, index) => (
-          <div key={index} className="product-slide">
+          <div key={index} className="product-slide"
+            onClick={()=>{handleClick(product.id)}}
+          >
             <Card
             style={{ width: '100%' , textAlign : 'center'}}
               hoverable

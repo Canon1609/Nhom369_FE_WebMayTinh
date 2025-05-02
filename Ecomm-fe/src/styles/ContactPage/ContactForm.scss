@@ -1,38 +1,142 @@
-.contact-form {
-  margin-top: 30px;
-}
+// ContactPage.scss
+@import '~antd/dist/antd.css';
 
-.contact-form h3 {
-  font-size: 20px;
-  color: #333;
-}
-
-.contact-form label {
-  font-weight: bold;
-}
-
-.contact-form input,
-.contact-form textarea {
-  padding: 12px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 90%;
-  background-color: white;
-  color: black;
-}
-
-.contact-form button {
-  background-color: #ff5b5b;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  margin-top: 15px;
-  border-radius: 5px;
-  margin-bottom: 50px;
-}
-
-.contact-form button:hover {
-  background-color: #c00;
+.contact-page {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .mb-0 {
+    margin-bottom: 0;
+  }
+  
+  .contact-breadcrumb {
+    padding: 15px 0;
+    background-color: #f0f0f0;
+    margin-bottom: 20px;
+    
+    a {
+      color: #333;
+      
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+  
+  .contact-header {
+    padding: 30px 0;
+    
+    h2 {
+      margin-bottom: 16px;
+      color: #333;
+    }
+    
+    p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 16px;
+      color: #666;
+    }
+  }
+  
+  .contact-section {
+    margin-bottom: 40px;
+  }
+  
+  .contact-info-card, .contact-form-card {
+    height: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    
+    .ant-card-body {
+      padding: 24px;
+    }
+  }
+  
+  .contact-details {
+    width: 100%;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    
+    .contact-icon {
+      font-size: 20px;
+      margin-right: 15px;
+      color: #1890ff;
+      margin-top: 4px;
+    }
+    
+    strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+  }
+  
+  .map-section {
+    margin-bottom: 60px;
+    
+    .ant-card {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+    }
+    
+    .map-container {
+      height: 400px;
+      margin-top: 20px;
+      
+      .map-placeholder {
+        height: 100%;
+        background-color: #eee;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        
+        .ant-typography {
+          &:first-child {
+            font-size: 18px;
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+  }
+  
+  .ant-btn-primary {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    
+    &:hover, &:focus {
+      background-color: #40a9ff;
+      border-color: #40a9ff;
+    }
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .contact-info-card {
+      margin-bottom: 24px;
+    }
+    
+    .contact-header {
+      padding: 20px 0;
+    }
+    
+    .map-section .map-container {
+      height: 300px;
+    }
+  }
 }

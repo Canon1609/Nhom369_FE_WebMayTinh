@@ -1,0 +1,77 @@
+.navbar-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-width: 100vw;
+  height: 80px;
+  position: fixed; /* hoặc absolute nếu cần */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; /* Hoặc màu khác để phân biệt */
+  z-index: 1000; /* Đảm bảo nó cao hơn các phần khác */
+}
+
+.logo {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 40%;
+  list-style: none;
+}
+
+.nav-links li a {
+  color: #333;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  width: 250px;
+}
+
+.search-container input {
+  border: none;
+  outline: none;
+  flex: 1;
+  background-color: #fff;
+  color: #333;
+}
+
+.search-button {
+  background-color: #fff;
+  cursor: pointer;
+  padding: 5px;
+  border: none;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.search-icon {
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.search-icons {
+  cursor: pointer;
+}
+
+.icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 10%;
+}
