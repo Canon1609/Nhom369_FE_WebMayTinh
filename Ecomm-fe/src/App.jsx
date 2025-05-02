@@ -59,12 +59,10 @@ function App() {
           <Route path="/" element={<Home onSearchHandler={setSearchHandlerCallback} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/cartPage" element={<CartPage />} />
-          {/* Thêm các route khác nếu cần */}
         </Routes>
         <Footer />
       </Layout>
-   
-     
+    
     </div>
   );
 }
